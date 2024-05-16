@@ -1,20 +1,32 @@
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import Layout from 'layouts/body/Layout';
+import { RootNavigator } from 'navigation/navigator/RootNavi';
+// import { RootNavigator } from 'pages/APage/AllScreen/AllScreens';
+import SoundTest from 'services/sound/soudtest';
+import SoundScreen from 'test/SoundScreen';
 
 export default function App() {
+  const MyTheme = {
+    dark: false,
+    colors: {
+      primary: "#DED0B6",
+      background: "#fff",
+      card: "#fff",
+      text: "#F8FAE5",
+      border:"#F8FAE5",
+      notification: "rgb(255, 69, 58)",
+    },
+  };
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Layout>
+        <NavigationContainer theme={MyTheme}>
+          <RootNavigator/>
+        </NavigationContainer>
+        {/* <SoundScreen/> */}
+        {/* <SoundTest/> */}
+        <StatusBar style="auto" />
+    </Layout>
+   
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
