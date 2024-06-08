@@ -9,9 +9,11 @@ export interface InputBoxProps {
     placeholder?: string,
     value:any,
     setValue:React.Dispatch<React.SetStateAction<any>>,
+    returnKeyType?: "done" | "go" | "next" | "search" | "send",
+    onSubmitEditing?: () => void,
     // width?: "100%" | "auto",
 }
-const InputBox:React.FC<InputBoxProps> = ({keyboardType,placeholder,setValue,value}) => {
+const InputBox:React.FC<InputBoxProps> = ({keyboardType,placeholder,setValue,value,onSubmitEditing,returnKeyType}) => {
   const [showPass, setShowPass] = React.useState<boolean>(false)
   const showPasswordHandler = () => {
     setShowPass(!showPass);
@@ -22,7 +24,11 @@ const InputBox:React.FC<InputBoxProps> = ({keyboardType,placeholder,setValue,val
         }
         return false
     }
-    
+    const onSubmitHandler = () => {
+        if(onSubmitEditing){
+            onSubmitEditing()
+        }
+    }
   return (
     <View style={styles.container}>
       <TextInput
@@ -33,6 +39,8 @@ const InputBox:React.FC<InputBoxProps> = ({keyboardType,placeholder,setValue,val
         keyboardType={keyboardType}
         autoCapitalize={"none"}
         secureTextEntry={checkSecureTextEntry() && !showPass}
+        returnKeyType={returnKeyType}
+        onSubmitEditing={onSubmitHandler}
       /> 
       {checkSecureTextEntry() && 
         <Pressable onPress={showPasswordHandler} style={styles.eyeSt}>

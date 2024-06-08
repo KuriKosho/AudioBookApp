@@ -42,6 +42,7 @@ const screenOptions = {
         </SubStack.Navigator> 
       )
   }
+  
 
   const BottomBar: React.FC<FullTabInfo> = ({ tabs,subScreen }) => {
     const Tab = createBottomTabNavigator();

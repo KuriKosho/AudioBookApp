@@ -12,6 +12,7 @@ export interface typeBookResponse {
     authorName?: string | undefined,
     numberStar?: number | undefined,
     numberListener?: number | undefined,
+    audioUrl?: string ,
 }
 const useTypeBook = (type:"recommend"| "bestseller"|"newrelease"|"trending"| string,page: number , size: number):typeBookResponse[] => {
     const [typeBooks, setTypeBooks] = useState<typeBookResponse[]>([]);

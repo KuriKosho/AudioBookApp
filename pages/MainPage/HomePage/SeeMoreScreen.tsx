@@ -28,10 +28,6 @@ import { useDashboardNavigator } from 'hook/navigate/useDashboardNavigator';
       if (name!=null) {
         console.log("Name: ",name);
       }
-      // setLoading(true);
-      // setTimeout(() => {
-      //   setLoading(false);
-      // }, 100);
     },[])
     const bookSelectHander = (id:string,bookName:string | undefined, authorName:string| undefined) => {
       navi.goToScreenWithParams("DetailsScreen",{

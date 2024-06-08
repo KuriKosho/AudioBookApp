@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Layout from 'layouts/body/Layout'
 import Header from 'components/Header/Header'
 import InputBox from 'components/UI/input/InputBox'
@@ -9,11 +9,14 @@ import SmallBook from 'components/HomeScreen/SmallBook'
 import { ListSellerBookData } from '../HomePage/Data/SellerBookData'
 import LibBook from 'components/HomeScreen/LibBook'
 import { useDashboardNavigator } from 'hook/navigate/useDashboardNavigator'
+import { useLibraryBook } from 'services/api/AudioUser/useLibrary'
+import { typeBookResponse } from 'services/api/AudioBook/useTypeBook'
 
 const LibraryScreen = () => {
   const navi = useDashboardNavigator();
   const [search, setSearch] = React.useState<string>('')
-  const [isSearch, setIsSearch] = React.useState<boolean>(false)
+  const {ListLibraryBookData, fetchLibraryBook,deleteBook,addBook} = useLibraryBook();
+
   // Choose book action
   const chooseBook = (id:string,bookName:string | undefined, authorName:string| undefined) => {
     navi.goToScreenWithParams("DetailsScreen",{
@@ -22,6 +25,27 @@ const LibraryScreen = () => {
       authorName:authorName,
     })
   }
+
+  useEffect(() => { 
+    fetchLibraryBook();
+  }, [])
+  
+ 
+  const formDeleteBook = (id:string) => {
+    Alert.alert(
+      "Delete Book",
+      "Are you sure you want to delete this book?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Delete", onPress: () => deleteBook(id) }
+      ]
+    );
+  }
+
   return (
     <Layout>
         {/* <ScrollView style={styles.container} showsVerticalScrollIndicator={true} nestedScrollEnabled={true}> */}
@@ -37,9 +61,9 @@ const LibraryScreen = () => {
           <View style={styles.bodyContaner}>
             <ScrollView horizontal={false} showsVerticalScrollIndicator={true}>
                     <View style={styles.rowToColumnContainer}>
-                      {ListSellerBookData.map((item,index) => {
+                      {ListLibraryBookData.map((item,index) => {
                         return (
-                          <LibBook  key={index} id={"1"} authorName={item.authorName} bookName={item.bookName} imgUrl={item.imgUrl} action={()=>chooseBook(item.id,item.bookName,item.authorName)} />
+                          <LibBook  key={index} id={item.id} authorName={item.authorName} bookName={item.bookName} imgUrl={item.imgUrl} action={()=>chooseBook(item.id,item.bookName,item.authorName)} actionDelete={()=> formDeleteBook(item.id)} />
                         )
                       })}
                     </View>

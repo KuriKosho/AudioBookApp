@@ -1,5 +1,5 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Dimensions, DimensionValue, Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect } from 'react'
 import NumberStart from './NumberStart';
 import { formatNumber } from 'utils/format/FormatString';
 import { typeBookResponse } from 'services/api/AudioBook/useTypeBook';
@@ -11,15 +11,23 @@ export interface SellerBookProps {
     authorName?: string | undefined;
     bookName?: string | undefined;
     numberListener?: number | undefined;
+    size?: number | string | undefined;
     action: () => void;
 }
-const SellerBook:React.FC<SellerBookProps> = ({id,imgUrl,action,bookName,numberStar,authorName, numberListener}) => {
+const width1 = Dimensions.get('window').width-45;
+const SellerBook:React.FC<SellerBookProps> = ({id,imgUrl,action,bookName,numberStar,authorName, numberListener,size}) => {
     const pressHandler = () => {
         console.log(numberListener)
         action();
     }
+    const [sizeNew, setSizeNew] = React.useState<number | string>(100)
+    useEffect(() => {
+        if(size){
+            setSizeNew(size)
+        }
+    },[])
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {width: width1}]}>
         <Pressable onPress={pressHandler}>
             <View style={styles.detailContainer}>
                 <View>
@@ -57,7 +65,7 @@ const styles = StyleSheet.create({
         justifyContent:"space-between",
         alignItems:"center",
         alignContent:"center",
-        width: 315,
+        // width: 315,
         height: 144,
         backgroundColor:"#F5F5FA",
         borderRadius: 12,

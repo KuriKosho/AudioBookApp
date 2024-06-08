@@ -3,6 +3,9 @@ import axiosClient, { ResponseSuccess } from '../ConfigAxios';
 import { Alert, ToastAndroid } from 'react-native';
 import tokenService from 'services/token/token.service';
 import { setUserId } from 'services/client/clientService';
+import clientService from 'services/client/client.service';
+import { UserInfoDTO } from '../AudioUser/updateUserInfo';
+import { UserInfo } from './LoginAxios';
 
 const verifyAccountPath = "/api/v1/verify-account?email=";
 
@@ -11,6 +14,8 @@ export interface VerifyResponse {
     verify: boolean;
     token: string;
     userId:string;
+    userInfo : UserInfo;
+    
 }
 
 export const verifyAccount = async (email: string, otp: string): Promise<boolean> => {
@@ -22,8 +27,10 @@ export const verifyAccount = async (email: string, otp: string): Promise<boolean
             check = response.verify;
             console.log("VERIFY ACCOUNT:", response.verify);
             if (check) {
+                await tokenService.removeToken();
                 await tokenService.setToken(response.token);
                 await setUserId(response.userId);
+                await clientService.setUserProfile(response.userInfo);
                 ToastAndroid.show("Account verified successfully", ToastAndroid.SHORT);
             } else {
                 Alert.alert(response.message, "Please try again", [{ text: "OK" }]);

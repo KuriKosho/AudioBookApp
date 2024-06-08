@@ -127,7 +127,7 @@ const HomeScreen = () => {
                     return (
                       <SellerBook numberListener={item.numberListener} key={index} id={item.id} 
                        bookName={item.bookName} authorName={item.authorName} 
-                       numberStar={item.numberStar} imgUrl={item.imgUrl} action={()=>chooseBook(item.id,item.bookName,item.authorName)} />
+                       numberStar={item.numberStar} imgUrl={item.imgUrl} action={()=>chooseBook(item.id,item.bookName,item.authorName)} size={315}/>
                     )
                   })}
                 </View>

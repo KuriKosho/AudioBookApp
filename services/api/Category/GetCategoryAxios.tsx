@@ -11,16 +11,12 @@ export interface CategoriesResponse{
 
 export const useCategoryList = (page: number, size: number): CategoriesResponse[] => {
     const [categoryList, setCategoryList] = useState<CategoriesResponse[]>([]);
-
     useEffect(() => {
         const fetchCategoryList = async () => {
             try {
                 const response: CategoriesResponse[] = await axiosClient.get(updateCategoryPath+"page="+page+"&size="+size);
-                // Handle successful update category response
                 if (response) {
                     setCategoryList(response);
-                    // console.log("Category list:", response);
-                    // ToastAndroid.show("Category list updated successfully", ToastAndroid.SHORT);
                 }
             } catch (error) {
                 console.log("Error:", error);

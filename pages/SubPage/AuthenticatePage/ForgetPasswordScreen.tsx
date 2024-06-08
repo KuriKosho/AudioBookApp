@@ -15,22 +15,20 @@ const ForgetPasswordScreen = () => {
   const [loading, setLoading] = React.useState<boolean>(false)
   const [email, setEmail] = React.useState<string>("")
   const submidHandler =  async () =>{
-    // setLoading(true);
-    // try{
-    //   const check = await forgotPassword(email);
-    //   if (check) {
-    //     console.log("Forgot Password Success");
-    //     navi.goToScreenWithParams("EmailSentScreen",{email:email})
-    //   } else {
-    //     console.log("Forgot Password Failed");
-    //   }
-    // } catch (error) {
-    //   console.log("Error:",error);
-    //   ToastAndroid.show("Error", ToastAndroid.SHORT);
-    // }
-    // setLoading(false);
+    setLoading(true);
+    try{
+      const check = await forgotPassword(email);
+      if (check) {
+        console.log("Forgot Password Success");
         navi.goToScreenWithParams("EmailSentScreen",{email:email})
-
+      } else {
+        console.log("Forgot Password Failed");
+      }
+    } catch (error) {
+      console.log("Error:",error);
+      ToastAndroid.show("Error", ToastAndroid.SHORT);
+    }
+    setLoading(false);
   }
   const cancelHandler = () =>{  
     navi.goBack();

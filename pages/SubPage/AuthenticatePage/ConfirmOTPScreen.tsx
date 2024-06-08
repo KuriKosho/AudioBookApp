@@ -28,8 +28,8 @@ const ConfirmOTPScreen = () => {
     const check = await verifyAccount(email, otp);
     if (check) {
       console.log("Login Success");
-      await AsyncStorage.removeItem("username");
-      await AsyncStorage.removeItem("password");
+      // await AsyncStorage.removeItem("username");
+      // await AsyncStorage.removeItem("password");
       // navigation.dispatch(StackActions.replace("WelcomeScreen"))
       navigation.replaceScreen("PersonalObjectScreen");
       console.log("Submit");

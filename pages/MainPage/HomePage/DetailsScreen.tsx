@@ -1,4 +1,4 @@
-import { Animated, Button, Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Animated, Button, Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useRoute } from '@react-navigation/native';
 import Layout from 'layouts/body/Layout';
@@ -19,6 +19,8 @@ import { postReview, ReviewDTO } from 'services/api/AudioUser/reviewBook';
 import { Audio } from 'expo-av';
 import { useDashboardNavigator } from 'hook/navigate/useDashboardNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DynamicIcon from 'components/UI/Icon/DynamicIcon';
+import { useLibraryBook } from 'services/api/AudioUser/useLibrary';
 
 
 const {width} = Dimensions.get('window');
@@ -26,6 +28,7 @@ const {width} = Dimensions.get('window');
 const DetailsScreen = () => {
   const route = useRoute();
   const navi = useDashboardNavigator();
+  const {addBook,deleteBook} = useLibraryBook();
   const {id,bookName,authorName} = route.params as {id:string | undefined,bookName:string | undefined,authorName:string| undefined};
   const [loading, setLoading] = React.useState<boolean>(false);
   const detailBook:bookDetailsResponse = useGetBookById(id);
@@ -38,6 +41,9 @@ const DetailsScreen = () => {
   const [progress, setProgress] = useState<number>(0);
   const [reviewer1, setReviewer1] = React.useState<Reviewers>();
   const [submitDisable, setSubmitDisable] = React.useState<boolean>(true);
+
+  // Add to saved
+  const [isAdd, setIsAdd] = React.useState<boolean>(false);
 
   // useEffect(() => {
   //   return sound
@@ -134,6 +140,15 @@ const DetailsScreen = () => {
       setSubmitDisable(true);
     }
   },[content,selectedStar])
+  const saveBookHandler = async () => {
+    if (isAdd) {
+      id && deleteBook(id);
+    } else {
+      id && addBook(id);
+    }
+    setIsAdd(!isAdd);
+  }
+
   return (
     <Layout>
       {loading ?? <Loading/>}
@@ -146,13 +161,18 @@ const DetailsScreen = () => {
             <Image source={{uri:detailBook.imgUrl}} style={styles.imgSt} />
           </View>
           <View style={styles.bookDetailsContainer}>
-            <View style={styles.flexColumn}>
-              <View>
-                <Text style={styles.bookTittle}>{bookName}</Text>
+            <View style={[styles.flexRowFix]}>
+              <View style={styles.flexColumn}>
+                <View>
+                  <Text style={styles.bookTittle}>{bookName}</Text>
+                </View>
+                <View>
+                  <Text style={styles.bookAuthor}>{authorName}</Text>
+                </View>
               </View>
-              <View>
-                <Text style={styles.bookAuthor}>{authorName}</Text>
-              </View>
+              <Pressable onPress={()=> saveBookHandler()}>
+                {isAdd ? <DynamicIcon name="bookmark-added" color='#1225b4' library='MaterialIcons' size={30}/> : <DynamicIcon name="bookmark-add" color='#1225b4' library='MaterialIcons' size={30}/>}
+              </Pressable>
             </View>
             <View style={styles.bookFlexStart}>
               <NumberStart number={detailBook.numberStar} size={26}/>
@@ -251,6 +271,13 @@ const styles = StyleSheet.create({
   flexColumn:{
     display: 'flex',
     flexDirection: 'column',
+  },
+  flexRowFix: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   flexRow:{
     display: 'flex',

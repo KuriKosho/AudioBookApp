@@ -1,18 +1,31 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AntDesign } from '@expo/vector-icons'
 
 export interface TextSelectWithIconProps {
     text: string | undefined,
     action?: () => void,
+    value?: string[],
+    setValue?: React.Dispatch<React.SetStateAction<string[]>>,
     width?: string | number,
-    icon?: keyof typeof AntDesign.glyphMap
+    icon?: keyof typeof AntDesign.glyphMap,
+    id?: string | number,
 }
-const TextSelectWithIcon:React.FC<TextSelectWithIconProps> = ({text,action,width}) => {
+const TextSelectWithIcon:React.FC<TextSelectWithIconProps> = ({text,action,width,value,setValue,id}) => {
   const [select, setSelect] = React.useState<boolean>(false);
+  const [selected, setSelected] = React.useState<boolean>(false);
+  useEffect(() => {
+    if (setValue && value && id) {
+      if (select) {
+        setValue([...value,id.toString()]);
+      } else {
+        setValue(value?.filter((item) => item !== id)); 
+      }
+    }
+  },[select])
   const pressHandler = () =>{
+    console.log("Press before:",select);
     setSelect(!select);
-    action && action();
   }
   return (
     <View style={[styles.container, {backgroundColor: select ? "#7466E3": "#F5F5FA"},width!=="auto" ? {width: "auto"}: {flex: 1} ]}>

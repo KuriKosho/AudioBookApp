@@ -40,7 +40,6 @@ axiosClient.interceptors.request.use(
       if (token) {
         config.headers!.Authorization = "Bearer " + token;
         console.log("Sent with token successfully")
-        
         // console.log("Token:", token);
       }
     }
